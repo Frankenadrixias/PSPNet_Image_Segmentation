@@ -1,3 +1,7 @@
+# --------------------------------------------#
+# json_to_dataset.py
+# 将labelme标注出的json文件转换为数据集
+# --------------------------------------------#
 import base64
 import json
 import os
@@ -7,21 +11,24 @@ import PIL.Image
 import defaults
 from labelme import utils
 
-# 原始图像文件路径
+# 原始图像文件存储路径
 jpgs_path = "datasets/JPEGImages"
 
-# 标签文件路径
+# 标签文件存储路径
 pngs_path = "datasets/SegmentationClass"
 
-# 原始图像文件与json文件处理前
+# 原始图像文件与json文件处理前的路径
 count = os.listdir("./datasets/before/")
+
+# 对所有文件循环遍历
 for i in range(len(count)):
     path = os.path.join("./datasets/before", count[i])
 
-    # 打开json文件
+    # 识别打开json文件
     if os.path.isfile(path) and path.endswith('json'):
         data = json.load(open(path))
 
+        # 从imageData字段读取图像数据
         if data['imageData']:
             imageData = data['imageData']
         else:
@@ -57,5 +64,6 @@ for i in range(len(count)):
             index_all = defaults.classes.index(name)
             new = new + index_all * (np.array(lbl) == index_json)
 
+        # 存储图像文件和标签文件
         utils.lblsave(osp.join(pngs_path, count[i].split(".")[0] + '.png'), new)
         print('Saved ' + count[i].split(".")[0] + '.jpg and ' + count[i].split(".")[0] + '.png')
