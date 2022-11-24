@@ -7,7 +7,7 @@ import os
 
 # 设置视频帧率
 rate = 30
-
+# 设置视频文件读取路径
 global_video_path = 'E:\\Downloads\\青藏高原街景\\主视角\\2020.10沿边'
 
 
@@ -60,19 +60,25 @@ def save_image(image, addr, num, frame_rate):
 
 if __name__ == '__main__':
 
+    # 识别根目录下所有文件夹
     for folders in os.listdir(global_video_path):
         print(folders)
         file_path = os.path.join(global_video_path, folders)
+
+        # 识别二级目录下的文件
         for files in os.listdir(file_path):
-            local_video_path = os.path.join(file_path, files)
-            local_save_path = os.path.join(file_path, files[:-4])
 
-            # 如果保存路径不存在
-            if not os.path.exists(local_save_path):
-                # 创建多级文件路径
-                os.makedirs(local_save_path)
+            # 对所有mp4视频文件进行处理
+            if files.endswith('MP4'):
+                local_video_path = os.path.join(file_path, files)
+                local_save_path = os.path.join(file_path, files[:-4])
 
-            # 读取视频并保存为每秒一帧的图像
-            read_video(local_video_path, local_save_path)
-            print('Video reading finished. ---' + files)
+                # 如果保存路径不存在
+                if not os.path.exists(local_save_path):
+                    # 创建多级文件路径
+                    os.makedirs(local_save_path)
+
+                # 读取视频并保存为每秒一帧的图像
+                read_video(local_video_path, local_save_path)
+                print('Video reading finished. ---' + files)
 
